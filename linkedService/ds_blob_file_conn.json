@@ -1,0 +1,12 @@
+{
+	"name": "ds_blob_file_conn",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": "DefaultEndpointsProtocol=https;AccountName=stgselfpractice;EndpointSuffix=core.windows.net;",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDJDNDU0OEExLUNBNUItNDI5Ny04MzdCLTYwRURCNkU5RUQxN18wMWE1MDEyYy1lYjBhLTQwYmQtYWU2ZS0xNDZkY2RiNjdmNDYiDQp9"
+		}
+	}
+}
