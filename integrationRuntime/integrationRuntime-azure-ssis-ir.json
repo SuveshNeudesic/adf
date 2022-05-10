@@ -1,0 +1,27 @@
+{
+	"name": "integrationRuntime-azure-ssis-ir",
+	"properties": {
+		"type": "Managed",
+		"typeProperties": {
+			"computeProperties": {
+				"location": "Central India",
+				"nodeSize": "Standard_D8_v3",
+				"numberOfNodes": 2,
+				"maxParallelExecutionsPerNode": 3
+			},
+			"ssisProperties": {
+				"catalogInfo": {
+					"catalogServerEndpoint": "dbserver-practice.database.windows.net",
+					"catalogAdminUserName": "suveshsonker",
+					"catalogAdminPassword": {
+						"type": "SecureString",
+						"value": "**********"
+					},
+					"catalogPricingTier": "S1"
+				},
+				"edition": "Standard",
+				"licenseType": "LicenseIncluded"
+			}
+		}
+	}
+}
