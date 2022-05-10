@@ -1,0 +1,30 @@
+{
+	"name": "target_azsqldb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "conn_azsqldb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CompaniesName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Address",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Companies"
+		}
+	}
+}
