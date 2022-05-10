@@ -5,19 +5,19 @@
 		"factoryName": {
 			"value": "datafactory-devenv"
 		},
-		"SqlServer_linkservice_onprem_connectionString": {
-			"value": ""
-		},
-		"blobcsvfile_connectionString": {
-			"value": ""
-		},
-		"azsqldatabase_connectionString": {
+		"conn_azsqldb_connectionString": {
 			"value": ""
 		},
 		"ds_blob_file_conn_connectionString": {
 			"value": ""
 		},
-		"conn_azsqldb_connectionString": {
+		"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogServerEndpoint": {
+			"value": "dbserver-practice.database.windows.net"
+		},
+		"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogAdminUserName": {
+			"value": "suveshsonker"
+		},
+		"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogAdminPassword": {
 			"value": ""
 		}
 	}

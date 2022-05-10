@@ -7,152 +7,30 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "datafactory-devenv"
 		},
-		"SqlServer_linkservice_onprem_connectionString": {
+		"conn_azsqldb_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'SqlServer_linkservice_onprem'"
-		},
-		"blobcsvfile_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'blobcsvfile'"
-		},
-		"azsqldatabase_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'azsqldatabase'"
+			"metadata": "Secure string for 'connectionString' of 'conn_azsqldb'"
 		},
 		"ds_blob_file_conn_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ds_blob_file_conn'"
 		},
-		"conn_azsqldb_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'conn_azsqldb'"
+		"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogServerEndpoint": {
+			"type": "string",
+			"defaultValue": "dbserver-practice.database.windows.net"
+		},
+		"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogAdminUserName": {
+			"type": "string",
+			"defaultValue": "suveshsonker"
+		},
+		"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogAdminPassword": {
+			"type": "secureString"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntime-selfhosted')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_csvtoazsql')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "cp_csvtosql",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "ID",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "ID",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "CompaniesName",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "CompaniesName",
-											"type": "String",
-											"physicalType": "nvarchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Address",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Address",
-											"type": "String",
-											"physicalType": "nvarchar"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_csv",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "target_azsql",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-05-10T02:38:54Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_csv')]",
-				"[concat(variables('factoryId'), '/datasets/target_azsql')]"
-			]
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_csv_azsql')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -218,8 +96,7 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"annotations": [],
-				"lastPublishTime": "2022-05-10T03:31:41Z"
+				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_csv_file')]",
@@ -227,33 +104,282 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/target_azsql')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/pl_multiple_csv_azsql')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "azsqldatabase",
-					"type": "LinkedServiceReference"
+				"activities": [
+					{
+						"name": "cp_multiple_csv_azsql",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"wildcardFileName": "Customer*.txt",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "pl_cust_csv_files",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "pl_azsql_from_csv_files",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "cp_move_archive",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "cp_multiple_csv_azsql",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"wildcardFileName": "Customer*.txt",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "pl_archive_csv_files",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "pl_delete_csv_files_from_source",
+						"type": "Delete",
+						"dependsOn": [
+							{
+								"activity": "cp_move_archive",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "Binary1",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"logStorageSettings": {
+								"linkedServiceName": {
+									"referenceName": "ds_blob_file_conn",
+									"type": "LinkedServiceReference"
+								},
+								"path": "sourcefile"
+							},
+							"enableLogging": true,
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
 				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Companies"
-				}
+				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/azsqldatabase')]"
+				"[concat(variables('factoryId'), '/datasets/pl_cust_csv_files')]",
+				"[concat(variables('factoryId'), '/datasets/pl_azsql_from_csv_files')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/datasets/pl_archive_csv_files')]",
+				"[concat(variables('factoryId'), '/datasets/Binary1')]",
+				"[concat(variables('factoryId'), '/linkedServices/ds_blob_file_conn')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_csv')]",
+			"name": "[concat(parameters('factoryName'), '/pl_ssis_migration')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Execute SSIS package1",
+						"type": "ExecuteSSISPackage",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"packageLocation": {
+								"packagePath": "MyFirstPackage-Azure/FirstSSIS/Package.dtsx",
+								"type": "SSISDB"
+							},
+							"environmentPath": null,
+							"connectVia": {
+								"referenceName": "integrationRuntime-azure-ssis-ir",
+								"type": "IntegrationRuntimeReference"
+							},
+							"loggingLevel": "Basic",
+							"projectConnectionManagers": {},
+							"packageConnectionManagers": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-azure-ssis-ir')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Binary1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "blobcsvfile",
+					"referenceName": "ds_blob_file_conn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "sourcefile"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ds_blob_file_conn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ds_blob_file_conn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "sourcefile"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ds_blob_file_conn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_csv_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ds_blob_file_conn",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -272,11 +398,11 @@
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/blobcsvfile')]"
+				"[concat(variables('factoryId'), '/linkedServices/ds_blob_file_conn')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_csv_file')]",
+			"name": "[concat(parameters('factoryName'), '/pl_archive_csv_files')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -289,7 +415,53 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "CSV File.txt",
+						"container": "destinationfile"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ds_blob_file_conn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_azsql_from_csv_files')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "conn_azsqldb",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Companies"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/conn_azsqldb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_cust_csv_files')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ds_blob_file_conn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
 						"container": "sourcefile"
 					},
 					"columnDelimiter": ",",
@@ -339,52 +511,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SqlServer_linkservice_onprem')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('SqlServer_linkservice_onprem_connectionString')]",
-					"alwaysEncryptedSettings": {
-						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
-					}
-				},
-				"connectVia": {
-					"referenceName": "integrationRuntime-selfhosted",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-selfhosted')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/blobcsvfile')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('blobcsvfile_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/azsqldatabase')]",
+			"name": "[concat(parameters('factoryName'), '/conn_azsqldb')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
-					"connectionString": "[parameters('azsqldatabase_connectionString')]",
-					"alwaysEncryptedSettings": {
-						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
-					}
+					"connectionString": "[parameters('conn_azsqldb_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -403,14 +537,61 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/conn_azsqldb')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/trigger-ssisir')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "AzureSqlDatabase",
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ssis_migration",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
 				"typeProperties": {
-					"connectionString": "[parameters('conn_azsqldb_connectionString')]"
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 2,
+						"startTime": "2022-05-10T09:36:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ssis_migration')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime-azure-ssis-ir')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "Central India",
+						"nodeSize": "Standard_D8_v3",
+						"numberOfNodes": 2,
+						"maxParallelExecutionsPerNode": 3
+					},
+					"ssisProperties": {
+						"catalogInfo": {
+							"catalogServerEndpoint": "[parameters('integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogServerEndpoint')]",
+							"catalogAdminUserName": "[parameters('integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogAdminUserName')]",
+							"catalogAdminPassword": {
+								"type": "SecureString",
+								"value": "[parameters('integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogAdminPassword')]"
+							},
+							"catalogPricingTier": "S1"
+						},
+						"edition": "Standard",
+						"licenseType": "LicenseIncluded"
+					}
 				}
 			},
 			"dependsOn": []
