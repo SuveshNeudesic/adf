@@ -1,0 +1,21 @@
+{
+	"name": "pl_archive_csv_files",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ds_blob_file_conn",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "destinationfile"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
