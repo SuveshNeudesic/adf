@@ -1,0 +1,33 @@
+{
+	"name": "pl_ssis_migration",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute SSIS package1",
+				"type": "ExecuteSSISPackage",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"packageLocation": {
+						"packagePath": "MyFirstPackage-Azure/FirstSSIS/Package.dtsx",
+						"type": "SSISDB"
+					},
+					"environmentPath": null,
+					"connectVia": {
+						"referenceName": "integrationRuntime-azure-ssis-ir",
+						"type": "IntegrationRuntimeReference"
+					},
+					"loggingLevel": "Basic"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
