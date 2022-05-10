@@ -5,6 +5,15 @@
 		"factoryName": {
 			"value": "datafactory-devenv"
 		},
+		"SqlServer_linkservice_onprem_connectionString": {
+			"value": ""
+		},
+		"blobcsvfile_connectionString": {
+			"value": ""
+		},
+		"azsqldatabase_connectionString": {
+			"value": ""
+		},
 		"ds_blob_file_conn_connectionString": {
 			"value": ""
 		},

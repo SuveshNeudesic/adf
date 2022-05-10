@@ -7,6 +7,18 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "datafactory-devenv"
 		},
+		"SqlServer_linkservice_onprem_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer_linkservice_onprem'"
+		},
+		"blobcsvfile_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'blobcsvfile'"
+		},
+		"azsqldatabase_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'azsqldatabase'"
+		},
 		"ds_blob_file_conn_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ds_blob_file_conn'"
@@ -42,11 +54,20 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"blobcsvfile_connectionString": {
+						"value": "[parameters('blobcsvfile_connectionString')]"
+					},
+					"azsqldatabase_connectionString": {
+						"value": "[parameters('azsqldatabase_connectionString')]"
+					},
 					"ds_blob_file_conn_connectionString": {
 						"value": "[parameters('ds_blob_file_conn_connectionString')]"
 					},
 					"conn_azsqldb_connectionString": {
 						"value": "[parameters('conn_azsqldb_connectionString')]"
+					},
+					"SqlServer_linkservice_onprem_connectionString": {
+						"value": "[parameters('SqlServer_linkservice_onprem_connectionString')]"
 					}
 				}
 			},
