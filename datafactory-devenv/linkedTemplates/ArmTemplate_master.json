@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "datafactory-devenv"
 		},
+		"conn_adls_gen2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'conn_adls_gen2'"
+		},
 		"conn_azsqldb_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'conn_azsqldb'"
@@ -14,6 +18,10 @@
 		"ds_blob_file_conn_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ds_blob_file_conn'"
+		},
+		"conn_adls_gen2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stgadlfgen2.dfs.core.windows.net"
 		},
 		"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogServerEndpoint": {
 			"type": "string",
@@ -53,11 +61,17 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"conn_adls_gen2_accountKey": {
+						"value": "[parameters('conn_adls_gen2_accountKey')]"
+					},
 					"conn_azsqldb_connectionString": {
 						"value": "[parameters('conn_azsqldb_connectionString')]"
 					},
 					"ds_blob_file_conn_connectionString": {
 						"value": "[parameters('ds_blob_file_conn_connectionString')]"
+					},
+					"conn_adls_gen2_properties_typeProperties_url": {
+						"value": "[parameters('conn_adls_gen2_properties_typeProperties_url')]"
 					},
 					"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogServerEndpoint": {
 						"value": "[parameters('integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogServerEndpoint')]"

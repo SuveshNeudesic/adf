@@ -5,11 +5,17 @@
 		"factoryName": {
 			"value": "datafactory-devenv"
 		},
+		"conn_adls_gen2_accountKey": {
+			"value": ""
+		},
 		"conn_azsqldb_connectionString": {
 			"value": ""
 		},
 		"ds_blob_file_conn_connectionString": {
 			"value": ""
+		},
+		"conn_adls_gen2_properties_typeProperties_url": {
+			"value": "https://stgadlfgen2.dfs.core.windows.net"
 		},
 		"integrationRuntime-azure-ssis-ir_properties_typeProperties_ssisProperties_catalogInfo_catalogServerEndpoint": {
 			"value": "dbserver-practice.database.windows.net"
