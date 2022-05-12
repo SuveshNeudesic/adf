@@ -12,8 +12,23 @@
 					"name": "sourcefetchallfilegen2"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "target_CompaniesInsert",
+						"type": "DatasetReference"
+					},
+					"name": "targetdbCompanies"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DistinctRows"
+				},
+				{
+					"name": "dcCheckColumns"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          ID as short,",
@@ -26,7 +41,43 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     rowUrlColumn: 'FileName') ~> sourcefetchallfilegen2"
+				"     rowUrlColumn: 'FileName') ~> sourcefetchallfilegen2",
+				"sourcefetchallfilegen2 aggregate(groupBy(mycols = sha2(256,columns())),",
+				"     each(match(true()), $$ = first($$))) ~> DistinctRows",
+				"DistinctRows derive(OwnerFName = iifNull(OwnerFName, 'NA', OwnerFName),",
+				"          OwnerLName = iifNull(OwnerLName, 'NA', OwnerLName)\r",
+				",",
+				"          FullName = rtrim(ltrim(iifNull(OwnerFName, '', OwnerFName) + ' ' + iifNull(OwnerLName, '', OwnerLName)))\r",
+				") ~> dcCheckColumns",
+				"dcCheckColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          CompaniesName as string,",
+				"          Address as string,",
+				"          createddate as timestamp,",
+				"          solddate as date,",
+				"          FirstName as string,",
+				"          LastName as string,",
+				"          FileName as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ID,",
+				"          CompaniesName,",
+				"          Address = Address1,",
+				"          solddate,",
+				"          FirstName = OwnerFName,",
+				"          LastName = OwnerLName,",
+				"          FileName",
+				"     )) ~> targetdbCompanies"
 			]
 		}
 	}
