@@ -6,28 +6,27 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_deletecustomer",
+						"referenceName": "ds_fetchallCompaniesfile_gen2",
 						"type": "DatasetReference"
 					},
-					"name": "deletecustomerdata"
+					"name": "sourcefetchallfilegen2"
 				}
 			],
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
 				"source(output(",
-				"          ID as integer,",
+				"          ID as short,",
 				"          CompaniesName as string,",
-				"          Address as string,",
-				"          createddate as timestamp,",
-				"          solddate as date,",
-				"          FirstName as string,",
-				"          LastName as string",
+				"          Address1 as string,",
+				"          solddate as date 'MM/dd/yyyy',",
+				"          OwnerFName as string,",
+				"          OwnerLName as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> deletecustomerdata"
+				"     ignoreNoFilesFound: false,",
+				"     rowUrlColumn: 'FileName') ~> sourcefetchallfilegen2"
 			]
 		}
 	}

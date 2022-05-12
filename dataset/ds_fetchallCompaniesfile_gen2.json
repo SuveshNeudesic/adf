@@ -1,0 +1,23 @@
+{
+	"name": "ds_fetchallCompaniesfile_gen2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "conn_adls_gen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "AllFiles/CustomerFile",
+				"fileSystem": "container-adlsgen2"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
