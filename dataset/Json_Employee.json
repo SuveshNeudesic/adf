@@ -1,0 +1,61 @@
+{
+	"name": "Json_Employee",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "conn_adls_gen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "EmployeeInfo.json",
+				"folderPath": "AllFiles/Employee",
+				"fileSystem": "container-adlsgen2"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"firstName": {
+					"type": "string"
+				},
+				"lastName": {
+					"type": "string"
+				},
+				"gender": {
+					"type": "string"
+				},
+				"age": {
+					"type": "integer"
+				},
+				"address": {
+					"type": "object",
+					"properties": {
+						"streetAddress": {
+							"type": "string"
+						},
+						"city": {
+							"type": "string"
+						},
+						"state": {
+							"type": "string"
+						}
+					}
+				},
+				"phoneNumbers": {
+					"type": "object",
+					"properties": {
+						"Phone": {
+							"type": "string"
+						},
+						"LandLine": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	}
+}
