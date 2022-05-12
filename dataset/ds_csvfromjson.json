@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "csvfromjson.txt",
+				"fileName": "csvfromjson.csv",
 				"folderPath": "AllFiles/Employee",
 				"fileSystem": "container-adlsgen2"
 			},
