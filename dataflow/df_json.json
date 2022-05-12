@@ -12,8 +12,20 @@
 					"name": "sourceemployeejson"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_csvfromjson",
+						"type": "DatasetReference"
+					},
+					"name": "savejsoningen2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "dcjsoncolumns"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          firstName as string,",
@@ -26,7 +38,30 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> sourceemployeejson"
+				"     documentForm: 'arrayOfDocuments') ~> sourceemployeejson",
+				"sourceemployeejson derive(streetAddress = address.streetAddress,",
+				"          city = address.city,",
+				"          state = address.state,",
+				"          phoneNumber = phoneNumbers.Phone,",
+				"          LandLine = phoneNumbers.LandLine) ~> dcjsoncolumns",
+				"dcjsoncolumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          firstName,",
+				"          lastName,",
+				"          gender,",
+				"          age,",
+				"          streetAddress,",
+				"          city,",
+				"          state,",
+				"          phoneNumber,",
+				"          LandLine",
+				"     )) ~> savejsoningen2"
 			]
 		}
 	}
