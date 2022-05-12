@@ -46,6 +46,7 @@
 				"          LandLine = phoneNumbers.LandLine) ~> dcjsoncolumns",
 				"dcjsoncolumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['jsontocsv'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
@@ -61,7 +62,8 @@
 				"          state,",
 				"          phoneNumber,",
 				"          LandLine",
-				"     )) ~> savejsoningen2"
+				"     ),",
+				"     partitionBy('hash', 1)) ~> savejsoningen2"
 			]
 		}
 	}
