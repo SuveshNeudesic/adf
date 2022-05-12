@@ -1,0 +1,37 @@
+{
+	"name": "cust_csv1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "conn_adls_gen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Customer CSV File 1.txt",
+				"folderPath": "AllFiles/CustomerFile",
+				"fileSystem": "container-adlsgen2"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "CompaniesName",
+				"type": "String"
+			},
+			{
+				"name": "Address",
+				"type": "String"
+			}
+		]
+	}
+}

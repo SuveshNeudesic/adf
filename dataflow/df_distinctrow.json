@@ -1,0 +1,34 @@
+{
+	"name": "df_distinctrow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_deletecustomer",
+						"type": "DatasetReference"
+					},
+					"name": "deletecustomerdata"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          CompaniesName as string,",
+				"          Address as string,",
+				"          createddate as timestamp,",
+				"          solddate as date,",
+				"          FirstName as string,",
+				"          LastName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> deletecustomerdata"
+			]
+		}
+	}
+}

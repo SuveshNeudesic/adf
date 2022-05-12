@@ -1,0 +1,69 @@
+{
+	"name": "df_derived_column",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CustomerFile",
+						"type": "DatasetReference"
+					},
+					"name": "ADLSGen2CustomerFile"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "savecustfileadlsgen2",
+						"type": "DatasetReference"
+					},
+					"name": "sinksaveinadlfgen2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "dcFieldName"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as short,",
+				"          CompaniesName as string,",
+				"          Address1 as string,",
+				"          solddate as date,",
+				"          OwnerFName as string,",
+				"          OwnerLName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ADLSGen2CustomerFile",
+				"ADLSGen2CustomerFile derive(OwnerFName = iifNull(OwnerFName, 'NA', OwnerFName),",
+				"          OwnerLName = iifNull(OwnerLName,  'NA' , OwnerLName),",
+				"          FullName = ltrim(iifNull(OwnerFName, 'NA', OwnerFName) + ' ' + iifNull(OwnerLName,  'NA' , OwnerLName)),",
+				"          solddate = toDate(solddate, 'mm/dd/yyyy')) ~> dcFieldName",
+				"dcFieldName select(mapColumn(",
+				"          ID,",
+				"          CompaniesName,",
+				"          Address = Address1,",
+				"          solddate,",
+				"          FirstName = OwnerFName,",
+				"          LastName = OwnerLName,",
+				"          FullName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinksaveinadlfgen2"
+			]
+		}
+	}
+}
