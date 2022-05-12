@@ -1,0 +1,33 @@
+{
+	"name": "df_json",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Json_Employee",
+						"type": "DatasetReference"
+					},
+					"name": "sourceemployeejson"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          firstName as string,",
+				"          lastName as string,",
+				"          gender as string,",
+				"          age as integer,",
+				"          address as (streetAddress as string, city as string, state as string),",
+				"          phoneNumbers as (Phone as string, LandLine as string)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> sourceemployeejson"
+			]
+		}
+	}
+}
